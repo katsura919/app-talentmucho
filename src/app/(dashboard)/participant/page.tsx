@@ -30,28 +30,45 @@ export default async function ParticipantDashboard() {
   const courses = coursesRes.data ?? [];
   const enrolledIds = new Set((enrollmentsRes.data ?? []).map((e) => e.course_id));
 
+  const hour = new Date().getHours();
+  const timeGreeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const enrolledCount = enrolledIds.size;
+
   return (
     <div className="p-8">
       {/* Welcome */}
-      <div className="relative mb-8 rounded-2xl overflow-hidden bg-[var(--beige-100)] dark:bg-[var(--card)] border border-[var(--beige-200)] dark:border-white/5 px-5 pt-6 pb-0 sm:px-8 sm:pt-8 flex items-end justify-between gap-4">
+      <div className="relative mb-8 px-5 pt-6 pb-0 sm:px-8 sm:pt-8 flex items-end justify-between gap-4">
+
+        {/* Accent rule */}
+        <div className="absolute bottom-0 left-0 w-32 h-px bg-gradient-to-r from-[var(--taupe-400)] to-transparent opacity-40" />
+
         <div className="relative z-10 pb-6 sm:pb-8">
-          <span className="tm-eyebrow block mb-2">Welcome back</span>
+          <span className="tm-eyebrow block mb-2">{timeGreeting}</span>
           <h2
-            className="font-serif font-light text-[var(--charcoal-900)] dark:text-foreground"
+            className="font-serif font-light"
             style={{ fontSize: "clamp(1.5rem, 3vw, 2.25rem)" }}
           >
-            Good to see you, {firstName}.
+            Good to see you,{" "}
+            <span className="bg-gradient-to-br from-[var(--charcoal-900)] to-[var(--taupe-400)] dark:from-white dark:to-[var(--taupe-400)] bg-clip-text text-transparent">
+              {firstName}.
+            </span>
           </h2>
           <p className="tm-body-sm mt-1">
             Here&apos;s a summary of your bootcamp progress.
           </p>
+          <div className="flex items-center gap-2 mt-3">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-[var(--beige-100)] dark:bg-white/5 border border-[var(--beige-200)] dark:border-white/10 text-[var(--charcoal-900)] dark:text-foreground">
+              <BookOpen className="size-3" />
+              {enrolledCount} of {courses.length} courses enrolled
+            </span>
+          </div>
         </div>
         <Image
           src="/assets/stickers/abiemeri.png"
           alt=""
           width={180}
           height={180}
-          className="shrink-0 select-none w-24 sm:w-36 md:w-[180px] h-auto object-contain"
+          className="shrink-0 select-none w-24 sm:w-36 md:w-[180px] h-auto object-contain relative z-10"
           style={{ transform: "translateY(8px)" }}
           priority
         />

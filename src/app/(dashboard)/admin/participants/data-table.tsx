@@ -23,15 +23,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+} from "@/components/ui/context-menu";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onRowClick?: (data: TData) => void;
+  rowContextMenu?: (data: TData) => React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onRowClick,
+  rowContextMenu,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -106,17 +115,29 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="border-b border-[var(--beige-200)] dark:border-white/5 hover:bg-[var(--beige-50)] dark:hover:bg-white/[0.02] data-[state=selected]:bg-[var(--beige-100)] dark:data-[state=selected]:bg-white/5 transition-colors"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-4 py-3 first:pl-5 last:pr-5">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                <ContextMenu key={row.id}>
+                  <ContextMenuTrigger asChild>
+                    <TableRow
+                      data-state={row.getIsSelected() && "selected"}
+                      className={[
+                        "border-b border-[var(--beige-200)] dark:border-white/5 hover:bg-[var(--beige-50)] dark:hover:bg-white/[0.02] data-[state=selected]:bg-[var(--beige-100)] dark:data-[state=selected]:bg-white/5 transition-colors",
+                        onRowClick ? "cursor-pointer" : "",
+                      ].join(" ")}
+                      onClick={() => onRowClick?.(row.original)}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} className="px-4 py-3 first:pl-5 last:pr-5">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </ContextMenuTrigger>
+                  {rowContextMenu && (
+                    <ContextMenuContent>
+                      {rowContextMenu(row.original)}
+                    </ContextMenuContent>
+                  )}
+                </ContextMenu>
               ))
             ) : (
               <TableRow>

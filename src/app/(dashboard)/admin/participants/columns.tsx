@@ -1,19 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, BookOpen, KeyRound } from "lucide-react";
+import { ArrowUpDown, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from "@/components/animate-ui/components/radix/dropdown-menu";
 import { Checkbox } from "@/components/animate-ui/components/radix/checkbox";
-import { CourseAccessDialog, type Course } from "./course-access-dialog";
+import { type Course } from "./course-access-dialog";
 
 export type { Course };
 
@@ -24,51 +15,6 @@ export type Participant = {
   enrolledCourseIds: string[];
   enrolledAt: string;
 };
-
-function RowActions({
-  participant,
-  courses,
-}: {
-  participant: Participant;
-  courses: Course[];
-}) {
-  const [accessOpen, setAccessOpen] = useState(false);
-
-  return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon-sm" aria-label="Open actions">
-            <MoreHorizontal className="size-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-44">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={() => navigator.clipboard.writeText(participant.email)}
-          >
-            Copy email
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setAccessOpen(true)}>
-            <KeyRound className="size-3.5" />
-            Manage access
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Remove</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <CourseAccessDialog
-        open={accessOpen}
-        onOpenChange={setAccessOpen}
-        participant={participant}
-        courses={courses}
-        enrolledCourseIds={participant.enrolledCourseIds}
-      />
-    </>
-  );
-}
 
 export function buildColumns(courses: Course[]): ColumnDef<Participant>[] {
   return [
@@ -85,11 +31,13 @@ export function buildColumns(courses: Course[]): ColumnDef<Participant>[] {
         />
       ),
       cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+        <div onClick={(e) => e.stopPropagation()}>
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        </div>
       ),
       enableSorting: false,
       enableHiding: false,
@@ -169,13 +117,6 @@ export function buildColumns(courses: Course[]): ColumnDef<Participant>[] {
             year: "numeric",
           })}
         </span>
-      ),
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => (
-        <RowActions participant={row.original} courses={courses} />
       ),
     },
   ];

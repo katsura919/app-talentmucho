@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, PlayCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CodeTabs } from "@/components/animate-ui/components/animate/code-tabs";
 
 const SESSION = {
@@ -171,18 +171,6 @@ export default function Session8Page() {
 
         {/* Content */}
         <main className="flex-1 min-w-0 overflow-y-auto p-6 md:p-8 flex flex-col gap-8">
-
-          {/* Video */}
-          <div className="w-full max-h-[45vh] aspect-video rounded-2xl border border-[var(--beige-200)] dark:border-white/5 bg-[var(--beige-100)] dark:bg-[var(--card)] flex flex-col items-center justify-center gap-3 shrink-0">
-            {SESSION.videoUrl ? (
-              <iframe src={SESSION.videoUrl} className="w-full h-full rounded-2xl" allowFullScreen />
-            ) : (
-              <>
-                <PlayCircle className="size-10 text-[var(--taupe-400)] opacity-40" />
-                <p className="text-sm text-[var(--taupe-400)]">Recording will appear here after the live session</p>
-              </>
-            )}
-          </div>
 
           {/* Title */}
           <div>

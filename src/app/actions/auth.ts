@@ -23,8 +23,18 @@ export async function login(
 
   if (error) return { error: error.message };
 
-  const role =
+  let role: string | undefined =
     data.user.app_metadata?.role || data.user.user_metadata?.role;
+
+  // Fall back to profiles table (covers users promoted via admin panel)
+  if (!role) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", data.user.id)
+      .single();
+    role = profile?.role;
+  }
 
   redirect(role === "admin" ? "/admin" : "/participant");
 }

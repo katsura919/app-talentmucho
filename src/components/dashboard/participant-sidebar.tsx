@@ -8,6 +8,7 @@ import {
   BookOpen,
   BarChart2,
   Award,
+  Settings,
   X,
   PanelLeftClose,
   PanelLeftOpen,
@@ -24,6 +25,7 @@ const nav = [
   { href: "/participant/courses", label: "My Courses", icon: BookOpen },
   { href: "/participant/progress", label: "Progress", icon: BarChart2 },
   { href: "/participant/certificates", label: "Certificates", icon: Award },
+  { href: "/participant/settings", label: "Settings", icon: Settings },
 ];
 
 interface Props {

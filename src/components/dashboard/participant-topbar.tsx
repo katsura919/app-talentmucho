@@ -105,7 +105,7 @@ export function ParticipantTopbar({ fullName, email, onMenuClick }: Props) {
         <ThemeTogglerButton
           modes={["light", "dark"]}
           variant="ghost"
-          size="icon"
+          size="default"
           className="w-9 h-9 rounded-xl text-[var(--taupe-400)] hover:bg-[var(--beige-100)] dark:hover:bg-[var(--accent)] hover:text-[var(--espresso-700)] dark:hover:text-foreground"
           aria-label="Toggle theme"
         />

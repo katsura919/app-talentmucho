@@ -17,7 +17,10 @@ export default async function CertificatesPage() {
     .eq("participant_id", user?.id ?? "")
     .order("issued_at", { ascending: false });
 
-  const certificates = (certs ?? []) as Array<{
+  const certificates = (certs ?? []).map((cert: any) => ({
+    ...cert,
+    courses: Array.isArray(cert.courses) ? cert.courses[0] : cert.courses,
+  })) as unknown as Array<{
     id: string;
     certificate_number: string;
     issued_at: string;
